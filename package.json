@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "firebase-admin": "^10.0.0",
+    "glob": "^7.2.0",
+    "lz-string": "^1.4.4",
+    "node-fetch": "2.6.5",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "ws": "^8.2.3"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "emulator:start": "firebase emulators:start --import=./firebase-data-path --export-on-exit"
+  }
+}
