@@ -12,5 +12,7 @@ module.exports = async captcha => {
         },
         body: `response=${captcha}&secret=${RECAPTCHA_SECRET}` // An incredibly hacky method
     });
-    return (await resp.json()).success;
+    const success = (await resp.json()).success;
+    logger.info('ReCAPTCHA success: ' + success)
+    return success;
 }

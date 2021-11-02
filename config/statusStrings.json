@@ -1,0 +1,6 @@
+{
+  "success": "OK",
+  "internalErr": "Internal server error",
+  "unauthorized": "Unauthorized",
+  "badReq": "Bad request"
+}

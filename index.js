@@ -5,13 +5,13 @@ const session = require('express-session');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
 
 const logger = require('./utils/logger');
 
 const serviceAccount = require('./config/serviceAccountKey.json');
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+initializeApp({
+    credential: cert(serviceAccount)
 });
 logger.info('Initialized firebase admin SDK');
 
@@ -74,6 +74,7 @@ server.listen(8080, function () {
     logger.info('Waiting for connection at http://localhost:8080');
 });
 
-require('./wsManager/eventHandlers')(wss);
 // require('./routes')(app);
+require('./wsManager/eventHandlers')(wss);
 require('./routes/auth')(app);
+require('./routes/logout')(app);

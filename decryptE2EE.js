@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const lzString = require('lz-string');
-const {getAuthTag} = require('./utils/cryptoUtils');
+const {getAuthTag} = require('./utils/crypto/cryptoUtils');
 
 module.exports = async (payload, privateKey) => {
     const [encContent, encKey, aesIV] = payload.split(';');
