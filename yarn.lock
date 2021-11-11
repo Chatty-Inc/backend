@@ -778,6 +778,11 @@ firebase-admin@^10.0.0:
     "@google-cloud/firestore" "^4.5.0"
     "@google-cloud/storage" "^5.3.0"
 
+firestore-store@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/firestore-store/-/firestore-store-2.0.2.tgz#1f3c58c43a5f37e5cbb2d32139a9858ed2f049fb"
+  integrity sha512-f5OoFGOLlCqe06/9Vxiwr3ByuDYoHy3yN1m9/+lHBMD9YX8FLhj8D6GnenFkbZpFFKsOgiKrl9wd2h9cVl+Q0A==
+
 fn.name@1.x.x:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fn.name/-/fn.name-1.1.0.tgz#26cad8017967aea8731bc42961d04a3d5988accc"

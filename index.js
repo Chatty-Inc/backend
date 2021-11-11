@@ -1,4 +1,5 @@
 'use strict';
+// This file handles basic init and importing all other modules in other files
 
 const { WebSocketServer } = require('ws')
 const session = require('express-session');
@@ -6,7 +7,9 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
+const dev = process.env.NODE_ENV !== 'production';
 const logger = require('./utils/logger');
 
 const serviceAccount = require('./config/serviceAccountKey.json');
@@ -22,10 +25,19 @@ global.connWSClients = new Map();
 // We need the same instance of the session parser in express and
 // WebSocket server.
 //
+const FirestoreStore = require('firestore-store')(session);
 const sessionParser = session({
+    store: new FirestoreStore({
+        database: getFirestore(),
+    }),
     saveUninitialized: false,
-    secret: ['$eCuRiTy'],
-    resave: false
+    secret: ['5dfe72e0360e40ffa82a97349a7a0585'],
+    name: 'sessionId',
+    resave: false,
+    cookie: {
+        httpOnly: true,
+        domain: dev ? 'localhost' : '', // TODO: Fill in actual production domain
+    }
 });
 
 //

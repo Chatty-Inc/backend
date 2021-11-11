@@ -5,6 +5,7 @@ const constructMsg = require('./construct');
 const { getFirestore } = require('firebase-admin/firestore');
 const validateObjKeys = require('../utils/validateObjKeys');
 const statusStrings = require('../config/statusStrings.json');
+const { validate, version } = require('uuid');
 
 module.exports = wss => {
     const db = getFirestore();
@@ -52,6 +53,23 @@ module.exports = wss => {
                             : { error: '404' }
                         ))
                     }
+                    break;
+                case 'userInfo':
+                    if (!validateObjKeys(parsed.payload, ['user'])) return;
+                    const requestedUID = parsed.payload.user === 'self' ? userId : parsed.payload.user;
+                    if (!(validate(requestedUID) && version(requestedUID) === 4)) return;
+
+                    const usrData = await db
+                        .collection('users')
+                        .doc(requestedUID)
+                        .get()
+                    const data = usrData.data()
+                    await send(constructMsg(parsed.tag, parsed.type,
+                        usrData.exists
+                            ? { uuid: requestedUID, created: data.created, username: data.username,
+                                tag: data.tag, handlePortion: data.handle }
+                            : { error: '404' }
+                    ))
                     break;
                 default:
 
