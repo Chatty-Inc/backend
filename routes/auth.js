@@ -62,18 +62,20 @@ module.exports = app => {
             res.status(401).send({ result: statusStrings.unauthorized, err: authErrCodes.recaptcha });
             return;
         }
-        if (!content.username || !content.pw) {
+        if (!content.username || !content.pw || content.username.trim().length === 0 || content.pw.length === 0) {
             res.status(400).send({ result: statusStrings.badReq, err: authErrCodes.missingParams });
             return;
         }
 
         // Attempt to retrieve user data
-        const dataSS = await db.collection('users').where('username', '==', content.username).limit(1).get();
+        const dataSS = await db
+            .collection('users')
+            .where('username', '==', content.username.trim()).limit(1).get();
         if (dataSS.empty) {
-            // Prevents an attacker from knowing if its the wrong username or pw
+            // Prevents an attacker from knowing if it's the wrong username or pw
             setTimeout(() => {
                 res.status(400).send({ result: statusStrings.badReq, err: authErrCodes.credWrong });
-            }, Math.floor(Math.random() * 500) + 400);
+            }, Math.floor(Math.random() * 500) + 200);
             return;
         }
 

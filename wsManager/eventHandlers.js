@@ -10,12 +10,15 @@ const { validate, version } = require('uuid');
 module.exports = wss => {
     const db = getFirestore();
 
-    wss.on('connection', function (ws, request) {
+    wss.on('connection', (ws, request) => {
         const userId = request.session.userId;
+        const promises = new Map();
 
         global.connWSClients.set(userId, ws);
 
         const send = async (constructedMsg) => ws.send(lzString.compressToUint8Array(constructedMsg).buffer);
+
+        send(constructMsg('123', 'keyUpdate', {request: 'sign', user: 'self'}))
 
         ws.on('message', async message => {
             //
@@ -66,7 +69,7 @@ module.exports = wss => {
                     const data = usrData.data()
                     await send(constructMsg(parsed.tag, parsed.type,
                         usrData.exists
-                            ? { uuid: requestedUID, created: data.created, username: data.username,
+                            ? { uuid: requestedUID, created: data.created.toMillis(), username: data.username,
                                 tag: data.tag, handlePortion: data.handle }
                             : { error: '404' }
                     ))
